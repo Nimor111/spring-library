@@ -5,10 +5,12 @@ import com.example.book.exception.BookNotFoundException;
 import com.example.book.model.Book;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 
 @Service
+@Transactional
 public class BookServiceImpl implements BookService {
 
     private BookRepository repository;
@@ -51,5 +53,10 @@ public class BookServiceImpl implements BookService {
     @Override
     public void deleteBook(Long id) {
         repository.deleteById(id);
+    }
+
+    @Override
+    public List<Book> getBooksByAuthorId(Long id) {
+        return repository.findByAuthorId(id);
     }
 }

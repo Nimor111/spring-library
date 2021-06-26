@@ -1,28 +1,31 @@
 package com.example.book.model;
 
-import org.hibernate.validator.constraints.ISBN;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import org.hibernate.annotations.Proxy;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 
 @Entity
+@Proxy(lazy = false)
+@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
 @Table(name = "books")
 public class Book {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column
     private String name;
 
-    @Column
-    private String author;
+    @ManyToOne
+    @JoinColumn(name="author_id")
+    private Author author;
 
     @Column
     private String isbn;
 
-    public Book(String name, String author, String isbn) {
+    public Book(String name, Author author, String isbn) {
         this.name = name;
         this.author = author;
         this.isbn = isbn;
@@ -56,11 +59,11 @@ public class Book {
     }
 
 
-    public String getAuthor() {
+    public Author getAuthor() {
         return author;
     }
 
-    public void setAuthor(String author) {
+    public void setAuthor(Author author) {
         this.author = author;
     }
 }

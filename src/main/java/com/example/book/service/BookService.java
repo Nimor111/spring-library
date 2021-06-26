@@ -10,4 +10,5 @@ public interface BookService {
     Book createBook(Book book);
     Book updateBook(Book book, Long id);
     void deleteBook(Long id);
+    List<Book> getBooksByAuthorId(Long id);
 }

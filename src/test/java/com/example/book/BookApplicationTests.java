@@ -1,7 +1,9 @@
 package com.example.book;
 
 import com.example.book.dto.BookDTO;
+import com.example.book.model.Author;
 import com.example.book.model.Book;
+import com.example.book.repository.AuthorRepository;
 import com.example.book.repository.BookRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import javax.transaction.Transactional;
 import java.util.*;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -28,11 +31,18 @@ class BookApplicationTests {
     private ObjectMapper om;
 
     @Autowired
-    private BookRepository repo;
+    private BookRepository bookRepo;
+
+    @Autowired
+    private AuthorRepository authorRepo;
 
     @BeforeEach
-    public void cleanUp() {
-        repo.deleteAll();
+    public void setUp() {
+        bookRepo.deleteAll();
+
+        Author author = new Author("Ivan", "bulgarian");
+        author.setId(1L);
+        authorRepo.save(author);
     }
 
     @Test
@@ -44,22 +54,24 @@ class BookApplicationTests {
 
     @Test
     public void shouldCreateANewBookSuccessfully() throws Exception {
-        BookDTO newBook = new BookDTO("Book1", "Author1", "978-3-16-148410-0");
+        BookDTO newBook = new BookDTO("Book1", 1L, "978-3-16-148410-0");
         String bookJson = om.writeValueAsString(newBook);
 
-        Book resultBook = new Book(newBook.getName(), newBook.getAuthor(), newBook.getIsbn());
+        Author author = authorRepo.getById(1L);
+        Book resultBook = new Book(newBook.getName(), author, newBook.getIsbn());
         resultBook.setId(1L);
 
         mockMvc.perform(post("/api/v1/books")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(bookJson))
                 .andExpect(status().isOk())
-                .andExpect(content().json(om.writeValueAsString(resultBook)));
+                .andExpect(jsonPath("$.name").value(newBook.getName()))
+                .andExpect(jsonPath("$.isbn").value(newBook.getIsbn()));
     }
 
     @Test
     public void shouldFailOnEmptyFieldWhenCreatingABook() throws Exception {
-        BookDTO newBook = new BookDTO(null, "Author1", "978-3-16-148410-0");
+        BookDTO newBook = new BookDTO(null, 1L, "978-3-16-148410-0");
         String bookJson = om.writeValueAsString(newBook);
 
         Map<String, String> errors = new HashMap<>();
@@ -74,7 +86,7 @@ class BookApplicationTests {
 
     @Test
     public void shouldFailOnTooShortNameWhenCreatingABook() throws Exception {
-        BookDTO newBook = new BookDTO("na", "Author1", "978-3-16-148410-0");
+        BookDTO newBook = new BookDTO("na", 1L, "978-3-16-148410-0");
         String bookJson = om.writeValueAsString(newBook);
 
         Map<String, String> errors = new HashMap<>();
@@ -89,13 +101,16 @@ class BookApplicationTests {
 
     @Test
     public void shouldUpdateBookSuccessfully() throws Exception {
-        Book existingBook = new Book("book1", "author1", "978-3-16-148410-0");
-        Book saved = repo.save(existingBook);
+        Author author = authorRepo.getById(1L);
+        Book existingBook = new Book("book1", author, "978-3-16-148410-0");
+        Book saved = bookRepo.save(existingBook);
 
-        BookDTO updatedBook = new BookDTO("newBook", "newAuthor", "978-3-16-148410-0");
+        BookDTO updatedBook = new BookDTO("newBook", 1L, "978-3-16-148410-0");
         String bookJson = om.writeValueAsString(updatedBook);
 
-        Book resultBook = new Book(updatedBook.getName(), updatedBook.getAuthor(), updatedBook.getIsbn());
+        Author newAuthor = authorRepo.getById(updatedBook.getAuthorId());
+
+        Book resultBook = new Book(updatedBook.getName(), newAuthor, updatedBook.getIsbn());
         resultBook.setId(saved.getId());
 
         mockMvc.perform(put(String.format("/api/v1/books/%d", saved.getId()))
@@ -112,8 +127,9 @@ class BookApplicationTests {
 
     @Test
     public void shouldDeleteBookSuccessfully() throws Exception {
-        Book existingBook = new Book("book1", "author1", "978-3-16-148410-0");
-        Book savedBook = repo.save(existingBook);
+        Author author = authorRepo.getById(1L);
+        Book existingBook = new Book("book1", author, "978-3-16-148410-0");
+        Book savedBook = bookRepo.save(existingBook);
 
         mockMvc.perform(delete(String.format("/api/v1/books/%d", savedBook.getId())))
                 .andExpect(status().isOk());

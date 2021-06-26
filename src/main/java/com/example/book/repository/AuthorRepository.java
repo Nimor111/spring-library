@@ -1,14 +1,10 @@
 package com.example.book.repository;
 
+import com.example.book.model.Author;
 import com.example.book.model.Book;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
-
-public interface BookRepository extends JpaRepository<Book, Long> {
-    List<Book> findByAuthorId(Long authorId);
+public interface AuthorRepository extends JpaRepository<Author, Long> {
 }
