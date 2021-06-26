@@ -36,6 +36,7 @@ public class BookServiceImpl implements BookService {
         return repository.findById(id).map(book -> {
             book.setName(newBook.getName());
             book.setAuthor(newBook.getAuthor());
+            book.setIsbn(newBook.getIsbn());
             return repository.save(book);
         }).orElseGet(() -> {
             newBook.setId(id);
