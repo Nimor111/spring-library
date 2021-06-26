@@ -1,5 +1,8 @@
-package com.example.book;
+package com.example.book.controller;
 
+import com.example.book.service.BookService;
+import com.example.book.dto.BookDTO;
+import com.example.book.model.Book;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;

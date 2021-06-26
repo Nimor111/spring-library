@@ -1,7 +1,7 @@
-package com.example.book;
+package com.example.book.exception;
 
 public class BookNotFoundException extends RuntimeException {
-    BookNotFoundException(Long id) {
+    public BookNotFoundException(Long id) {
         super("Could not find book " + id);
     }
 }

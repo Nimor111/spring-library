@@ -1,6 +1,6 @@
-package com.example.book;
+package com.example.book.service;
 
-import org.springframework.stereotype.Service;
+import com.example.book.model.Book;
 
 import java.util.List;
 

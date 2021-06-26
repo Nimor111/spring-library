@@ -1,30 +1,50 @@
-package com.example.book;
+package com.example.book.model;
 
 import org.hibernate.validator.constraints.ISBN;
 
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-public class BookDTO {
+@Entity
+@Table(name = "books")
+public class Book {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
-    @NotBlank(message = "Name is mandatory!")
-    @Size(min = 3, max = 255, message = "Name must be between 3 and 255 symbols")
+    @Column
     private String name;
 
-    @NotBlank(message = "Author is mandatory!")
+    @Column
     private String author;
 
-    @ISBN
-    @NotBlank
+    @Column
     private String isbn;
 
-    public BookDTO(String name, String author, String isbn) {
+    public Book(String name, String author, String isbn) {
         this.name = name;
         this.author = author;
         this.isbn = isbn;
     }
 
-    public BookDTO() {
+    public Book() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getIsbn() {
+        return isbn;
+    }
+
+    public void setIsbn(String isbn) {
+        this.isbn = isbn;
     }
 
     public String getName() {
@@ -35,19 +55,12 @@ public class BookDTO {
         this.name = name;
     }
 
+
     public String getAuthor() {
         return author;
     }
 
     public void setAuthor(String author) {
         this.author = author;
-    }
-
-    public String getIsbn() {
-        return isbn;
-    }
-
-    public void setIsbn(String isbn) {
-        this.isbn = isbn;
     }
 }

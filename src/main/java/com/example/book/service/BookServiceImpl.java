@@ -1,5 +1,8 @@
-package com.example.book;
+package com.example.book.service;
 
+import com.example.book.repository.BookRepository;
+import com.example.book.exception.BookNotFoundException;
+import com.example.book.model.Book;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
