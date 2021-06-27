@@ -10,7 +10,6 @@ import java.util.List;
 
 
 @Service
-@Transactional
 public class BookServiceImpl implements BookService {
 
     private BookRepository repository;
@@ -38,6 +37,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Book updateBook(Book newBook, Long id) {
+        // FIXME: can this only be the line 47..49 code?
         return repository.findById(id).map(book -> {
             book.setName(newBook.getName());
             book.setAuthor(newBook.getAuthor());

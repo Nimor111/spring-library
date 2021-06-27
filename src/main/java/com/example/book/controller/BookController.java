@@ -25,18 +25,20 @@ public class BookController {
         this.storeClient = storeClient;
     }
 
+    // FIXME: Paging?
     @GetMapping("/api/v1/books")
-    List<Book> getBooks() {
+    public List<Book> getBooks() {
         return bookService.getBooks();
     }
 
     @GetMapping("/api/v1/books/{bookId}")
-    Book getBook(@PathVariable Long bookId) {
+    public Book getBook(@PathVariable Long bookId) {
         return bookService.getBookById(bookId);
     }
 
     @PostMapping("api/v1/books")
-    Book createBook(@Valid @RequestBody BookDTO newBook) {
+    public Book createBook(@Valid @RequestBody BookDTO newBook) {
+        // FIXME: These should be in the service
         Author author = authorService.getAuthorById(newBook.getAuthorId());
         StoreDTO store = storeClient.getStoreById(newBook.getStoreId());
         var bookToCreate = new Book(newBook.getName(), author, newBook.getIsbn(), newBook.getStoreId());
@@ -44,7 +46,8 @@ public class BookController {
     }
 
     @PutMapping("/api/v1/books/{bookId}")
-    Book replaceBook(@Valid @RequestBody BookDTO newBook, @PathVariable Long bookId) {
+    public Book replaceBook(@Valid @RequestBody BookDTO newBook, @PathVariable Long bookId) {
+        // FIXME: These should be in the service
         Author author = authorService.getAuthorById(newBook.getAuthorId());
         StoreDTO store = storeClient.getStoreById(newBook.getStoreId());
         var bookToUpdate = new Book(newBook.getName(), author, newBook.getIsbn(), newBook.getStoreId());
@@ -52,12 +55,16 @@ public class BookController {
     }
 
     @DeleteMapping("/api/v1/books/{bookId}")
-    void deleteBook(@PathVariable Long bookId) {
+    public void deleteBook(@PathVariable Long bookId) {
         bookService.deleteBook(bookId);
     }
 
     @GetMapping("/api/v1/authors/{authorId}/books")
-    List<Book> getBooksByAuthorId(@PathVariable Long authorId) {
+    public List<Book> getBooksByAuthorId(@PathVariable Long authorId) {
         return bookService.getBooksByAuthorId(authorId);
     }
+
+    // FIXME: REST Actions - never use verbs
+    // books/{bookId}/read
+    // books/{bookId}/status
 }

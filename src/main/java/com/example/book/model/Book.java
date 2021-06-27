@@ -9,7 +9,6 @@ import javax.validation.constraints.Null;
 
 @Entity
 @Proxy(lazy = false)
-@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
 @Table(name = "books")
 public class Book {
     @Id

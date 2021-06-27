@@ -1,28 +1,22 @@
 package com.example.book.exception;
 
-import org.hibernate.hql.internal.ast.ErrorReporter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
 
-@ControllerAdvice
+@RestControllerAdvice
 public class BookExceptionHandler {
-    @ResponseBody
     @ExceptionHandler(BookNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     ErrorResponse bookNotFoundHandler(BookNotFoundException ex) {
         return new ErrorResponse(ex, HttpStatus.NOT_FOUND, "/api/v1/books");
     }
 
-    @ResponseBody
     @ExceptionHandler(AuthorNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     ErrorResponse authorNotFoundHandler(AuthorNotFoundException ex) {
@@ -34,7 +28,6 @@ public class BookExceptionHandler {
         return new ResponseEntity<>(new ErrorResponse(ex, ex.getStatusCode(), "/api/v1/stores"), ex.getStatusCode());
     }
 
-    @ResponseBody
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException ex) {
