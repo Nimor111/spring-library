@@ -19,10 +19,21 @@ public class BookDTO {
     @NotBlank
     private String isbn;
 
+    // FIXME: This should not be the default
+    @NotNull
+    private Long storeId = 1L;
+
     public BookDTO(String name, Long authorId, String isbn) {
         this.name = name;
         this.authorId = authorId;
         this.isbn = isbn;
+    }
+
+    public BookDTO(String name, Long authorId, String isbn, Long storeId) {
+        this.name = name;
+        this.authorId = authorId;
+        this.isbn = isbn;
+        this.storeId = storeId;
     }
 
     public BookDTO() {
@@ -51,4 +62,13 @@ public class BookDTO {
     public void setIsbn(String isbn) {
         this.isbn = isbn;
     }
+
+    public Long getStoreId() {
+        return storeId;
+    }
+
+    public void setStoreId(Long storeId) {
+        this.storeId = storeId;
+    }
+
 }

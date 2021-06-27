@@ -37,26 +37,14 @@ public class AuthorController {
         return authorService.createAuthor(authorToCreate);
     }
 
-    @PutMapping("/api/v1/author/{authorId}")
+    @PutMapping("/api/v1/authors/{authorId}")
     Author replaceAuthor(@Valid @RequestBody AuthorDTO newAuthor, @PathVariable Long authorId) {
         var authorToUpdate = new Author(newAuthor.getName(), newAuthor.getNationality());
         return authorService.updateAuthor(authorToUpdate, authorId);
     }
 
-    @DeleteMapping("/api/v1/author/{authorId}")
+    @DeleteMapping("/api/v1/authors/{authorId}")
     void deleteAuthor(@PathVariable Long authorId) {
         authorService.deleteAuthor(authorId);
-    }
-
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException ex) {
-        Map<String, String> errors = new HashMap<>();
-        ex.getBindingResult().getAllErrors().forEach((error) -> {
-            String fieldName = ((FieldError) error).getField();
-            String errorMessage = error.getDefaultMessage();
-            errors.put(fieldName, errorMessage);
-        });
-        return errors;
     }
 }

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.hibernate.annotations.Proxy;
 
 import javax.persistence.*;
+import javax.validation.constraints.Null;
 
 @Entity
 @Proxy(lazy = false)
@@ -25,10 +26,20 @@ public class Book {
     @Column
     private String isbn;
 
+    @Column
+    private Long storeId = 1L;
+
     public Book(String name, Author author, String isbn) {
         this.name = name;
         this.author = author;
         this.isbn = isbn;
+    }
+
+    public Book(String name, Author author, String isbn, Long storeId) {
+        this.name = name;
+        this.author = author;
+        this.isbn = isbn;
+        this.storeId = storeId;
     }
 
     public Book() {
@@ -66,4 +77,13 @@ public class Book {
     public void setAuthor(Author author) {
         this.author = author;
     }
+
+    public Long getStoreId() {
+        return storeId;
+    }
+
+    public void setStoreId(Long storeId) {
+        this.storeId = storeId;
+    }
+
 }
