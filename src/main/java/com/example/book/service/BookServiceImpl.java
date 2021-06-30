@@ -31,32 +31,8 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Book createBook(Book newBook) {
-        return repository.save(newBook);
-    }
-
-    @Override
-    public Book updateBook(Book newBook, Long id) {
-        // FIXME: can this only be the line 47..49 code?
-        return repository.findById(id).map(book -> {
-            book.setName(newBook.getName());
-            book.setAuthor(newBook.getAuthor());
-            book.setIsbn(newBook.getIsbn());
-            return repository.save(book);
-        }).orElseGet(() -> {
-            newBook.setId(id);
-
-            return repository.save(newBook);
-        });
-    }
-
-    @Override
     public void deleteBook(Long id) {
         repository.deleteById(id);
     }
 
-    @Override
-    public List<Book> getBooksByAuthorId(Long id) {
-        return repository.findByAuthorId(id);
-    }
 }

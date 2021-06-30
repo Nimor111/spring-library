@@ -12,9 +12,6 @@ public class BookDTO {
     @Size(min = 3, max = 255, message = "Name must be between 3 and 255 symbols")
     private String name;
 
-    @NotNull
-    private Long authorId;
-
     @ISBN
     @NotBlank
     private String isbn;
@@ -23,15 +20,13 @@ public class BookDTO {
     @NotNull
     private Long storeId = 1L;
 
-    public BookDTO(String name, Long authorId, String isbn) {
+    public BookDTO(String name, String isbn) {
         this.name = name;
-        this.authorId = authorId;
         this.isbn = isbn;
     }
 
-    public BookDTO(String name, Long authorId, String isbn, Long storeId) {
+    public BookDTO(String name, Long storeId, String isbn) {
         this.name = name;
-        this.authorId = authorId;
         this.isbn = isbn;
         this.storeId = storeId;
     }
@@ -45,14 +40,6 @@ public class BookDTO {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Long getAuthorId() {
-        return authorId;
-    }
-
-    public void setAuthorId(Long authorId) {
-        this.authorId = authorId;
     }
 
     public String getIsbn() {

@@ -25,7 +25,6 @@ public class BookController {
         this.storeClient = storeClient;
     }
 
-    // FIXME: Paging?
     @GetMapping("/api/v1/books")
     public List<Book> getBooks() {
         return bookService.getBooks();
@@ -36,32 +35,9 @@ public class BookController {
         return bookService.getBookById(bookId);
     }
 
-    @PostMapping("api/v1/books")
-    public Book createBook(@Valid @RequestBody BookDTO newBook) {
-        // FIXME: These should be in the service
-        Author author = authorService.getAuthorById(newBook.getAuthorId());
-        StoreDTO store = storeClient.getStoreById(newBook.getStoreId());
-        var bookToCreate = new Book(newBook.getName(), author, newBook.getIsbn(), newBook.getStoreId());
-        return bookService.createBook(bookToCreate);
-    }
-
-    @PutMapping("/api/v1/books/{bookId}")
-    public Book replaceBook(@Valid @RequestBody BookDTO newBook, @PathVariable Long bookId) {
-        // FIXME: These should be in the service
-        Author author = authorService.getAuthorById(newBook.getAuthorId());
-        StoreDTO store = storeClient.getStoreById(newBook.getStoreId());
-        var bookToUpdate = new Book(newBook.getName(), author, newBook.getIsbn(), newBook.getStoreId());
-        return bookService.updateBook(bookToUpdate, bookId);
-    }
-
     @DeleteMapping("/api/v1/books/{bookId}")
     public void deleteBook(@PathVariable Long bookId) {
         bookService.deleteBook(bookId);
-    }
-
-    @GetMapping("/api/v1/authors/{authorId}/books")
-    public List<Book> getBooksByAuthorId(@PathVariable Long authorId) {
-        return bookService.getBooksByAuthorId(authorId);
     }
 
     // FIXME: REST Actions - never use verbs
