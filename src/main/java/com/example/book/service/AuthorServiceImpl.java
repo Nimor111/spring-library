@@ -64,13 +64,13 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public Book addBookToAuthor(Long id, Book book) {
-        storeClient.getStoreById(book.getStoreId());
+        StoreDTO store = storeClient.getStoreById(book.getStoreId());
         return bookRepository.save(book);
     }
 
     @Override
     public Book replaceAuthorBook(Long id, Long bookId, Book updatedBook) {
-        storeClient.getStoreById(updatedBook.getStoreId());
+        StoreDTO store = storeClient.getStoreById(updatedBook.getStoreId());
         return bookRepository.findById(bookId).map(book -> {
             book.setAuthor(updatedBook.getAuthor());
             book.setName(updatedBook.getName());
